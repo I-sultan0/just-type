@@ -1,29 +1,35 @@
-import Head from "next/head";
-import TypingPractice from "../components/TypingPractice";
+"use client";
+
+import { useState } from "react";
+import Navbar from "../components/Navbar";
+import TimeSelector from "../components/TimeSelector";
+import TypingTest from "../components/TypingTest";
 
 export default function Home() {
+  const [difficulty, setDifficulty] = useState("easy");
+  const [time, setTime] = useState(15);
+  const [showingResults, setShowingResults] = useState(false);
+
+  const handleTestEnd = (isShowingResults) => {
+    setShowingResults(isShowingResults);
+  };
+
+  const handleRestart = () => {
+    setShowingResults(false);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
-      <Head>
-        <title>Just Type</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <header className="bg-indigo-600 text-white py-4">
-        <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold">Typing Skills Improver</h1>
-        </div>
-      </header>
-
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <TypingPractice />
-      </main>
-
-      <footer className="bg-gray-800 text-white py-4">
-        <div className="container mx-auto px-4 text-center">
-          <p>&copy; 2023 Typing Skills Improver. All rights reserved.</p>
-        </div>
-      </footer>
+    <div className="min-h-screen bg-gray-900 text-white">
+      <Navbar difficulty={difficulty} setDifficulty={setDifficulty} />
+      <div className="container mx-auto p-4">
+        {!showingResults && <TimeSelector time={time} setTime={setTime} />}
+        <TypingTest
+          difficulty={difficulty}
+          time={time}
+          onTestEnd={handleTestEnd}
+          onRestart={handleRestart}
+        />
+      </div>
     </div>
   );
 }
